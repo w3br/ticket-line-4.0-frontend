@@ -40,3 +40,7 @@ Developed by a team of 6 as part of a university course.
 |---|---|
 | UI Architect | @w3b3 |
 | + 5 team members | |
+
+### Assets
+
+All images and media used in this project are for demonstration purposes only as part of a non-commercial university project. If you are the creator of any asset used and would like it removed or credited, please open an issue or reach out directly.
