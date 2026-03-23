@@ -1,24 +1,38 @@
-# SE PR Group Phase
+# TicketLine — Frontend
 
-## First Steps
+The frontend of a full-stack ticketing platform built as a university project. TicketLine combines an event ticket shop, event and news management for admins, and a complete purchase flow. The backend (Spring Boot) is maintained in a separate private repository.
 
-Navigate to the root folder of the project and execute `npm install`. Based on the *package.json* file, npm will download all required node_modules to run an Angular application.
-Afterwards, execute `npm install -g @angular/cli` to install the Angular CLI globally.
+### Tech Stack
 
-## Development
+Angular · TypeScript · HTML · CSS
 
-### Development server
 
-Run `ng serve` to start the web application. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+### Screenshots
 
-### Code scaffolding
+> **Shop — Event Overview**
+> `screenshot-shop.png`
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+> **Event Detail & Seat Selection**
+> `screenshot-seats.png`
 
-### Build
+> **Admin — Event Management**
+> `screenshot-admin.png`
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+### Getting Started
 
-### Further help
+```bash
+npm install
+ng serve
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+The app runs on `http://localhost:4200`. A running backend instance is required for full functionality.
+
+
+### Team
+
+Developed by a team of 6 as part of a university course.
+
+| Role | |
+|---|---|
+| UI Architect | @w3b3 |
+| + 5 team members | |
