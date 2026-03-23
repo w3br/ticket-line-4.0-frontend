@@ -38,8 +38,12 @@ Developed by a team of 6 as part of a university course.
 
 | Role | |
 |---|---|
-| UI Architect | [@w3br](https://github.com/w3br) |
-| + 5 team members | |
+| UI Architect & Full Stack Developer | [@w3br](https://github.com/w3br) |
+| Team Lead​ & Full Stack Developer | Wiktoria Okrajni​ |
+| Technical Architect & Full Stack Developer | Stefan Samer​ |
+| Documentation Lead & Full Stack Developer​ | Ioana Teodora Stratulat​ |
+| Test Lead & Full Stack Developer | Adrian Walter​ |
+| Database Lead & Full Stack Developer | Muhammed Kerim Öztürk​ |
 
 ### Assets
 
