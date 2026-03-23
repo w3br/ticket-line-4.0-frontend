@@ -38,7 +38,7 @@ Developed by a team of 6 as part of a university course.
 
 | Role | |
 |---|---|
-| UI Architect | @w3br |
+| UI Architect | [@w3br](https://github.com/w3br) |
 | + 5 team members | |
 
 ### Assets
