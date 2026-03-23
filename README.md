@@ -9,14 +9,18 @@ Angular · TypeScript · HTML · CSS
 
 ### Screenshots
 
+> **TicketLine 4.0 — Landing Page**
+> ![Landing Page](screenshots/TicketLine_Landing.png)
+
+
 > **Shop — Event Overview**
-> `screenshot-shop.png`
+> ![Event Overview](screenshots/TicketLine_EventSearch.png)
 
 > **Event Detail & Seat Selection**
-> `screenshot-seats.png`
+> ![Seat Plan](screenshots/TicketLine_EventDetail.png)
 
-> **Admin — Event Management**
-> `screenshot-admin.png`
+> **Admin — Management**
+> ![Seat Plan](screenshots/TicketLine_AdminView.png)
 
 ### Getting Started
 
