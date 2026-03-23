@@ -1,0 +1,98 @@
+<div *ngIf="news; else loadingOrError" class="news-detail container py-5">
+
+  <div class="row g-5 align-items-start">
+
+    <!-- LEFT: Image / Carousel -->
+    <div class="col-12 col-lg-6">
+      <div class="media-card">
+        <!-- Carousel if > 1 -->
+        <ng-container *ngIf="news.images?.length > 1; else singleImage">
+          <div
+            id="newsImagesCarousel"
+            class="carousel slide"
+            data-bs-ride="carousel"
+            data-bs-interval="3500"
+            data-bs-pause="hover"
+          >
+            <div class="carousel-indicators">
+              <button
+                *ngFor="let img of news.images; let i = index"
+                type="button"
+                data-bs-target="#newsImagesCarousel"
+                [attr.data-bs-slide-to]="i"
+                [class.active]="i === 0"
+                [attr.aria-current]="i === 0 ? 'true' : null"
+                [attr.aria-label]="'Slide ' + (i + 1)">
+              </button>
+            </div>
+
+            <div class="carousel-inner">
+              <div
+                class="carousel-item"
+                *ngFor="let img of news.images; let i = index"
+                [class.active]="i === 0"
+              >
+                <img
+                  [src]="getImageUrl(img.path)"
+                  [alt]="news.title + ' image ' + (i + 1)"
+                  class="d-block w-100 news-media-img"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+
+            <button class="carousel-control-prev" type="button"
+                    data-bs-target="#newsImagesCarousel" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+
+            <button class="carousel-control-next" type="button"
+                    data-bs-target="#newsImagesCarousel" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+        </ng-container>
+
+        <!-- Single image -->
+        <ng-template #singleImage>
+          <img
+            *ngIf="news.images?.length === 1"
+            [src]="getImageUrl(news.images[0].path)"
+            [alt]="news.title"
+            class="w-100 news-media-img"
+            loading="lazy"
+          />
+        </ng-template>
+      </div>
+    </div>
+
+    <!-- RIGHT: Content -->
+    <div class="col-12 col-lg-6">
+      <div class="content-card">
+        <h1 class="news-title mb-2">{{ news.title }}</h1>
+
+        <p class="news-date mb-4">
+          {{ news.publishedAt | date:'dd.MM.yyyy' }}
+        </p>
+
+        <div class="news-content">
+          {{ news.fullText }}
+        </div>
+
+        <button class="btn btn-dark mt-4 px-4" (click)="goBack()">
+          Back to News
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<ng-template #loadingOrError>
+  <div class="container py-5">
+    <p *ngIf="!error" class="mb-0">Loading news...</p>
+    <p *ngIf="error" class="text-danger mb-0">{{ error }}</p>
+  </div>
+</ng-template>

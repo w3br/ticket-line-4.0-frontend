@@ -1,0 +1,46 @@
+<div class="container admin-page">
+  <div class="admin-header text-center">
+
+    <nav class="nav justify-content-center admin-nav">
+      <a
+        class="nav-link"
+        routerLink="/admin"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }">
+        Users
+      </a>
+
+      <a
+        class="nav-link"
+        routerLink="/admin/createUser"
+        routerLinkActive="active">
+        Create User
+      </a>
+
+      <a
+        class="nav-link"
+        routerLink="/admin/createNews"
+        routerLinkActive="active">
+        Create News
+      </a>
+
+      <a
+        class="nav-link"
+        routerLink="/admin/createEvent"
+        routerLinkActive="active">
+        Create Event
+      </a>
+
+      <a
+        class="nav-link"
+        routerLink="/admin/createMerchandise"
+        routerLinkActive="active">
+        Create Merchandise
+      </a>
+    </nav>
+  </div>
+
+  <div class="admin-content">
+    <router-outlet></router-outlet>
+  </div>
+</div>

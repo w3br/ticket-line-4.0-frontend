@@ -1,0 +1,54 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm mb-3 custom-navbar sticky-top">
+  <div class="container">
+    <!-- left: brand-icon:  -->
+
+    <a class="navbar-brand d-flex align-items-center" routerLink="/">
+      <img src="assets/brand-icon.svg" class="brand-icon me-2" alt="Brand Icon" />
+      <span class="brand-text">Ticketline</span>
+    </a>
+
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarContent"
+            aria-controls="navbarContent" aria-expanded="false"
+            aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarContent">
+      <!-- mid:  -->
+      <ul class="navbar-nav mx-auto main-nav">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/news" routerLinkActive="active">News</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/events/search" routerLinkActive="active">Events</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/orders" routerLinkActive="active">My Orders</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/rewards" routerLinkActive="active">Rewards</a>
+        </li>
+        <li class="nav-item" *ngIf="isAdmin()">
+          <a class="nav-link" routerLink="/admin" routerLinkActive="active">Admin</a>
+        </li>
+      </ul>
+
+      <!-- right -->
+      <div class="navbar-nav ml-auto d-flex align-items-center right-actions">
+
+        <!-- cart -->
+        <a class="nav-link" routerLink="/cart-checkout">
+          <i class="bi bi-cart"></i>
+        </a>
+
+        <!-- bootstrap profile icon -->
+        <a class="nav-link" *ngIf="authService.isLoggedIn()" routerLink="/profile">
+          <i class="bi bi-person-circle"></i>
+        </a>
+
+      </div>
+    </div>
+  </div>
+</nav>

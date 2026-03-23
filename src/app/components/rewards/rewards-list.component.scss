@@ -1,0 +1,107 @@
+.pill-pagination {
+  gap: 7.5px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+}
+
+.pill-pagination .page-link {
+  width: 32.5px;
+  height: 32.5px;
+  padding: 0;
+
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #e6e6e6;
+  background: #fff;
+  color: #0F172A;
+  box-shadow: none;
+}
+
+.pill-pagination .page-item.active .page-link {
+  background: #0F172A;
+  border-color: #0F172A;
+  color: #fff;
+}
+
+.pill-pagination .page-item.disabled .page-link {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.pill-pagination .page-link:hover {
+  border-color: #cfcfcf;
+  background: #cfcfcf;
+}
+
+.pill-pagination .page-link:focus {
+  box-shadow: none;
+}
+
+.reward-card {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.reward-img {
+  height: 180px;
+  width: 100%;
+  object-fit: cover;
+  background: #f8f9fa;
+}
+
+@media (min-width: 768px) {
+  .reward-img {
+    height: 220px;
+  }
+}
+
+.reward-title {
+  display: block;
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: break-word; // fallback
+  hyphens: auto;
+}
+
+.reward-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.reward-points-badge {
+  white-space: nowrap;
+}
+
+.reward-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.reward-icon-btn {
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+
+.reward-left {
+  min-width: 0;
+}
+
+.reward-left,
+.reward-title {
+  max-width: 100%;
+}
+

@@ -1,0 +1,193 @@
+<div class="container mt-5 profile-page">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="mb-0">Rewards</h4>
+
+        @if (rewardPoints !== null) {
+          <span class="badge bg-secondary">
+            Your points: {{ rewardPoints }}
+          </span>
+        }
+      </div>
+
+      @if (loading) {
+        <p>Loading rewards...</p>
+      }
+
+      @if (!loading) {
+
+        @if (rewards.length === 0) {
+          <div class="alert alert-info">
+            No rewards available.
+          </div>
+        }
+
+        @if (rewards.length > 0) {
+          <div class="row g-3">
+
+            @for (r of pagedRewards; track r.id) {
+              <div class="col-12 col-md-6">
+                <div class="card shadow-sm h-100 reward-card">
+
+                  @if (r.imagePath) {
+                    <img
+                      class="card-img-top reward-img"
+                      [src]="getImageUrl(r.imagePath)"
+                      [alt]="r.description"
+                    />
+                  }
+
+                  <div class="card-body d-flex flex-column">
+
+                    <div class="d-flex justify-content-between align-items-start gap-2">
+                      <div class="me-2 flex-grow-1 reward-left">
+                        <h6 class="card-title mb-1 reward-title">{{ r.description }}</h6>
+
+                        @if (r.price !== undefined && r.price !== null) {
+                        <small class="text-muted">
+                          Price: {{ r.price }}
+                        </small>
+                      }
+                    </div>
+
+                      <div class="reward-right">
+                        <span class="badge bg-dark reward-points-badge">
+                          {{ r.pointCost }} points
+                        </span>
+
+                        @if (isAdmin()) {
+                          <div class="reward-actions">
+                            <a
+                              class="btn btn-sm responsive-edit-button reward-icon-btn"
+                              [routerLink]="['/admin/createMerchandise', r.id, 'edit']"
+                              aria-label="Edit reward"
+                              title="Edit"
+                            >
+                              <i class="bi bi-pencil-square"></i>
+                            </a>
+
+                            <button
+                              type="button"
+                              class="btn btn-sm responsive-danger-button reward-icon-btn"
+                              (click)="rewardForDeletion = r"
+                              data-bs-toggle="modal"
+                              data-bs-target="#delete-dialog"
+                              aria-label="Delete reward"
+                              title="Delete"
+                            >
+                              <i class="bi bi-trash"></i>
+                            </button>
+                          </div>
+                        }
+                      </div>
+                    </div>
+
+                    <div class="mt-auto d-flex justify-content-end gap-2 pt-3">
+                      <button
+                        type="button"
+                        class="btn btn-outline-primary flex-fill"
+                        (click)="addToCart(r, false)"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="top"
+                        title="Add to cart and purchase this Item with money"
+                      >
+                        Add to Cart
+                      </button>
+
+                      @if (r.pointCost <= rewardPoints) {
+                        <button
+                          type="button"
+                          class="btn btn-outline-success flex-fill"
+                          (click)="addToCart(r, true)"
+                          data-bs-toggle="tooltip"
+                          data-bs-placement="top"
+                          title="Add to cart and redeem for reward points"
+                        >
+                          Redeem
+                        </button>
+                      }
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            }
+
+          </div>
+        }
+        <nav class="d-flex justify-content-center mt-2" aria-label="All Rewards pagination">
+          <ul class="pagination pagination-sm mb-4 pill-pagination">
+            <li class="page-item" [class.disabled]="currentRewardPage === 1">
+              <button class="page-link" type="button" (click)="prevPage()">
+                <i class="bi bi-chevron-left"></i>
+              </button>
+            </li>
+
+            @for (p of visibleRewardPages; track $index) {
+              @if (p === '...') {
+                <li class="page-item disabled">
+                  <span class="page-link">…</span>
+                </li>
+              } @else {
+                <li class="page-item" [class.active]="p === currentRewardPage">
+                  <button class="page-link" type="button" (click)="goToPage(p)">{{ p }}</button>
+                </li>
+              }
+            }
+
+            <li class="page-item" [class.disabled]="currentRewardPage === totalRewardPages">
+              <button class="page-link" type="button" (click)="nextPage()">
+                <i class="bi bi-chevron-right"></i>
+              </button>
+            </li>
+          </ul>
+        </nav>
+      }
+
+    </div>
+  </div>
+</div>
+
+
+<!-- Delete dialog -->
+<div class="modal fade" id="delete-dialog" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Delete reward</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        @if (rewardForDeletion) {
+          <p class="mb-0">
+            Do you really want to delete
+            <strong>{{ rewardForDeletion.description }}</strong>?
+          </p>
+        } @else {
+          <p class="mb-0">No reward selected.</p>
+        }
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cancel
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-danger"
+          (click)="confirmDelete()"
+          data-bs-dismiss="modal"
+          [disabled]="!rewardForDeletion || isDeleting"
+        >
+          {{ isDeleting ? 'Deleting…' : 'Delete' }}
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>

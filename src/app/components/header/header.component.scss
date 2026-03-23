@@ -1,0 +1,29 @@
+/* brand - logo and text */
+.brand-icon {
+  height: 28px;
+  width: auto;
+}
+
+.brand-text {
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  font-size: 1.4rem;
+}
+
+/* menu */
+.main-nav .nav-link {
+  font-family: 'Syne', sans-serif;
+  font-size: 1rem;
+  color: #111;
+  padding: 0 1.5rem;
+}
+
+.main-nav .nav-link.active {
+  text-decoration: underline;
+}
+
+/* icons right */
+.right-actions .nav-link i {
+  font-size: 1.25rem;
+}

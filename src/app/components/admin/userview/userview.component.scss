@@ -1,0 +1,43 @@
+:host ::ng-deep .pagination-circle {
+  display: flex;
+  gap: 8px;
+}
+
+:host ::ng-deep .pagination-circle .page-link {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+  border: 1px solid #dee2e6;
+
+  background-color: #fff;
+  color: #919191;
+
+  box-shadow: none;
+}
+
+:host ::ng-deep .pagination-circle .page-item.active .page-link {
+  background-color: black;
+  color: #fff;
+  border-color: #919191;
+}
+
+:host ::ng-deep .pagination-circle .page-link:hover {
+  background-color: #919191;
+  color: #fff;
+}
+
+:host ::ng-deep .pagination-circle .page-item.disabled .page-link {
+  color: #919191;
+  opacity: 1;
+  pointer-events: none;
+}
+
+:host ::ng-deep .pagination-circle .page-link:focus {
+  box-shadow: none;
+}

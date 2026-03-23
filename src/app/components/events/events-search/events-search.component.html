@@ -1,0 +1,202 @@
+<form class="search-form" (ngSubmit)="onSearch()" xmlns="http://www.w3.org/1999/html">
+
+  <!-- Search input -->
+  <div class="filter-field">
+    <label for="search">Search</label>
+    <div class="input-wrapper">
+      <input
+        type="text"
+        name="searchText"
+        [(ngModel)]="searchText"
+        placeholder="Artist, Event, Event Type or Duration in minutes (Xmin)"
+        class="search-input"
+      />
+      <button
+        type="button"
+        class="clear-input"
+        *ngIf="searchText"
+        (click)="clearSearchText()"
+      >
+        ×
+      </button>
+    </div>
+  </div>
+
+  <!-- Filters row -->
+
+  <div class="filters-row">
+
+    <div class="filter-field">
+      <label for="artist">Artist</label>
+      <div class="input-wrapper">
+        <input
+          id="artist"
+          type="text"
+          name="artist"
+          class="filter-input icon-artist"
+          [(ngModel)]="artistInput"
+          (ngModelChange)="onArtistInputChange($event)"
+          (focus)="onArtistFocus()"
+          (blur)="onArtistBlur()"
+          autocomplete="off"
+        />
+        <button
+          type="button"
+          class="clear-input"
+          *ngIf="artistInput"
+          (click)="clearArtist()"
+        >
+          ×
+        </button>
+      </div>
+      <ul
+        class="suggestions"
+        *ngIf="artistDropdownOpen && artistSuggestions.length > 0"
+      >
+        <li
+          *ngFor="let a of artistSuggestions"
+          (mousedown)="onArtistSuggestionMouseDown(a, $event)"
+        >
+          {{ a.name }}
+        </li>
+      </ul>
+    </div>
+
+
+    <div class="filter-field">
+      <label for="venue">Venue</label>
+      <div class="input-wrapper">
+        <input
+          id="venue"
+          type="text"
+          name="venue"
+          class="filter-input icon-venue"
+          [(ngModel)]="venueInput"
+          (ngModelChange)="onVenueInputChange($event)"
+          (focus)="onVenueFocus()"
+          (blur)="onVenueBlur()"
+          autocomplete="off"
+        />
+        <button
+          type="button"
+          class="clear-input"
+          *ngIf="venueInput"
+          (click)="clearVenue()"
+        >
+          ×
+        </button>
+      </div>
+      <ul
+        class="suggestions"
+        *ngIf="venueDropdownOpen && venueSuggestions.length > 0"
+      >
+        <li
+          *ngFor="let v of venueSuggestions"
+          (mousedown)="onVenueSuggestionMouseDown(v, $event)"
+        >
+          {{ v.label }}
+        </li>
+      </ul>
+
+    </div>
+
+
+    <div class="date-field">
+      <label for="dateFrom">From</label>
+      <input
+        id="dateFrom"
+        type="date"
+        name="dateFrom"
+        [(ngModel)]="dateFrom"
+        [max]="dateTo || null"
+      />
+    </div>
+
+    <div class="date-field">
+      <label for="dateTo">To</label>
+      <input
+        id="dateTo"
+        type="date"
+        name="dateTo"
+        [(ngModel)]="dateTo"
+        [min]="dateFrom || null"
+      />
+    </div>
+
+    <div class="filter-field">
+      <label for="minPrice">Min Price (€)</label>
+      <input type="number" name="minPrice" [(ngModel)]="minPrice" class="filter-input icon-price" min="0" />
+    </div>
+
+    <div class="filter-field">
+      <label for="maxPrice">Max Price (€)</label>
+      <input type="number" name="maxPrice" [(ngModel)]="maxPrice" class="filter-input icon-price" min="0" />
+    </div>
+
+
+  </div>
+
+
+
+
+  <!-- Search button -->
+  <button type="submit"
+          class="search-btn">
+    Search
+  </button>
+
+</form>
+
+<div class="top-ten-container">
+  <div class="top-ten-header">
+    <h3>Top Events</h3>
+    <div class="top-ten-filters">
+      <div class="top-filter-field">
+        <label for="topMonth">Month</label>
+        <input
+          id="topMonth"
+          type="month"
+          name="topMonth"
+          [(ngModel)]="topMonth"
+          [max]="maxMonth"
+          (change)="onTopFilterChange()"
+        />
+      </div>
+      <div class="top-filter-field">
+        <label for="topCategory">Category</label>
+        <select id="topCategory" name="topCategory" [(ngModel)]="topCategory" (change)="onTopFilterChange()">
+          <option value="ALL">All Categories</option>
+          <option *ngFor="let cat of categories" [value]="cat.key">{{cat.label}}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="top-ten-content">
+    <div *ngIf="topEventsLoading" class="loading-state">
+      <div class="spinner-border text-dark" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <span>Loading top events...</span>
+    </div>
+
+    <div *ngIf="!topEventsLoading && topEvents.length === 0" class="empty-state">
+      No sales data for that month.
+    </div>
+
+    <div *ngIf="!topEventsLoading && topEvents.length > 0" class="top-ten-grid">
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-5 g-4">
+        <div class="col d-flex align-items-stretch" *ngFor="let event of topEvents; let i = index">
+          <div class="top-event-wrapper w-100">
+            <div class="rank-badge">#{{ i + 1 }}</div>
+            <app-event-card [event]="event"></app-event-card>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+

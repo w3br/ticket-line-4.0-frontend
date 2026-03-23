@@ -1,0 +1,65 @@
+<div class="event-details-container" *ngIf="!isLoading && !error && event">
+  <div class="back-navigation">
+    <button class="btn btn-secondary" (click)="goBack()">
+      <i class="bi bi-arrow-left"></i> Back
+    </button>
+  </div>
+  <div class="event-header">
+    <div class="event-image">
+      <img [src]="event.imageUrl" [alt]="event.title" *ngIf="event.imageUrl">
+      <div class="no-image" *ngIf="!event.imageUrl">No Image Available</div>
+    </div>
+    <div class="event-info">
+      <h1>{{ event.title }}</h1>
+      <div class="event-meta">
+        <span class="badge">{{ event.type }}</span>
+        <span class="badge secondary">{{ event.category }}</span>
+      </div>
+      <p class="description">{{ event.description }}</p>
+      <div class="artists" *ngIf="event.artists && event.artists.length > 0">
+        <h3>Artists</h3>
+        <ul>
+          <li *ngFor="let artist of event.artists">{{ artist.name }}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="performances-section">
+    <h2>Available Performances</h2>
+    <div class="performances-list" *ngIf="performances.length > 0">
+      <div class="performance-item" *ngFor="let p of performances">
+        <div class="performance-info">
+          <div class="performance-time">
+            <i class="bi bi-calendar3"></i>
+            {{ p.startTime | date:'EEEE, MMMM d, y, h:mm a' }}
+          </div>
+          <div class="performance-location">
+            <i class="bi bi-geo-alt"></i>
+            {{ p.venueName }} · {{ p.hallName }}
+          </div>
+          <div class="performance-price" *ngIf="p.minPrice">
+            From {{ p.minPrice }}€
+          </div>
+        </div>
+        <div class="performance-actions">
+          <button class="btn btn-primary" (click)="goToSeatingPlan(p.performanceId)">
+            Tickets & Seating
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="no-performances" *ngIf="performances.length === 0">
+      <p>No performances available for this event at the moment.</p>
+    </div>
+  </div>
+</div>
+
+<div class="loading-state" *ngIf="isLoading">
+  <p>Loading event details...</p>
+</div>
+
+<div class="error-state" *ngIf="error">
+  <p>{{ error }}</p>
+  <button class="btn btn-primary" routerLink="/events/search">Back to Search</button>
+</div>

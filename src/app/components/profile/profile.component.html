@@ -1,0 +1,168 @@
+<div class="container mt-5 profile-page">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+
+      <h4 class="mb-4">Edit User Profile</h4>
+
+      @if (loading) {
+        <p>Loading profile...</p>
+      }
+
+      @if (!loading) {
+        <form
+          #profileForm="ngForm"
+          (ngSubmit)="onSubmit(profileForm)"
+          class="mt-3"
+          novalidate>
+
+          <!-- NAME -->
+          <div class="form-group mb-3">
+            <label for="name">Name*</label>
+            <input
+              id="name"
+              class="form-control"
+              name="name"
+              [(ngModel)]="profile.name"
+              required
+              minlength="2"
+              maxlength="255"
+              pattern="^(?!.*\s{2,})[A-Za-zÄÖÜäöüẞß]+(?:[ -][A-Za-zÄÖÜäöüẞß]+)*$"
+              #name="ngModel"
+              [class.is-invalid]="name.invalid && (name.dirty || name.touched)"
+            />
+
+            <div class="invalid-feedback d-sm-block" *ngIf="name.invalid && (name.dirty || name.touched)">
+              <div *ngIf="name.errors?.['required']">Name is required.</div>
+              <div *ngIf="name.errors?.['minlength']">Name must be at least 2 characters.</div>
+              <div *ngIf="name.errors?.['maxlength']">Name is too long.</div>
+              <div *ngIf="name.errors?.['pattern']">
+                Only letters, single spaces, and '-' are allowed (no numbers, dots, or multiple spaces).
+              </div>
+            </div>
+          </div>
+
+          <!-- EMAIL -->
+          <div class="form-group mb-3">
+            <label for="email">Email*</label>
+            <input
+              id="email"
+              type="email"
+              class="form-control"
+              name="email"
+              [(ngModel)]="profile.email"
+              required
+              email
+              maxlength="255"
+              #email="ngModel"
+              [class.is-invalid]="email.invalid && (email.dirty || email.touched)"
+            />
+
+            <div class="invalid-feedback d-sm-block" *ngIf="email.invalid && (email.dirty || email.touched)">
+              <div *ngIf="email.errors?.['required']">Email is required.</div>
+              <div *ngIf="email.errors?.['email']">Please enter a valid email address.</div>
+              <div *ngIf="email.errors?.['maxlength']">Email is too long.</div>
+            </div>
+          </div>
+
+          <!-- STREET -->
+          <div class="form-group mb-3">
+            <label for="street">Street</label>
+            <input
+              id="street"
+              class="form-control"
+              name="street"
+              [(ngModel)]="profile.street"
+              maxlength="255"
+              pattern="^(?!.*\s{2,})[A-Za-zÄÖÜäöüẞß0-9]+(?:[A-Za-zÄÖÜäöüẞß0-9\s\.,\/\-'])*$"
+              #street="ngModel"
+              [class.is-invalid]="street.invalid && (street.dirty || street.touched)"
+            />
+
+            <div class="invalid-feedback d-sm-block" *ngIf="street.invalid && (street.dirty || street.touched)">
+              <div *ngIf="street.errors?.['maxlength']">Street is too long.</div>
+              <div *ngIf="street.errors?.['pattern']">
+                Street may contain letters, numbers, spaces and . , / - (no multiple spaces).
+              </div>
+            </div>
+          </div>
+
+          <!-- CITY -->
+          <div class="form-group mb-3">
+            <label for="city">City</label>
+            <input
+              id="city"
+              class="form-control"
+              name="city"
+              [(ngModel)]="profile.city"
+              maxlength="255"
+              pattern="^(?!.*\s{2,})[A-Za-zÄÖÜäöüẞß]+(?:[ -][A-Za-zÄÖÜäöüẞß]+)*$"
+              #city="ngModel"
+              [class.is-invalid]="city.invalid && (city.dirty || city.touched)"
+            />
+
+            <div class="invalid-feedback d-sm-block" *ngIf="city.invalid && (city.dirty || city.touched)">
+              <div *ngIf="city.errors?.['maxlength']">City is too long.</div>
+              <div *ngIf="city.errors?.['pattern']">
+                City may contain only letters, single spaces, and '-'.
+              </div>
+            </div>
+          </div>
+
+          <!-- COUNTRY -->
+          <div class="form-group mb-3">
+            <label for="country">Country</label>
+            <select
+              id="country"
+              class="form-control"
+              name="country"
+              [(ngModel)]="profile.country"
+              #country="ngModel"
+            >
+              <option value="" disabled>Select country</option>
+              <option *ngFor="let c of countries" [value]="c.name">
+                {{ c.name }} ({{ c.code }})
+              </option>
+            </select>
+          </div>
+
+          <button
+            class="btn btn-dark w-100 profile-submit-btn"
+            [disabled]="saving || !profileForm.valid">
+            @if (!saving) { Update Profile }
+            @if (saving)  { Saving... }
+          </button>
+
+        </form>
+
+        <div class="mt-3 d-flex flex-column align-items-start profile-action-links">
+
+          <button
+            type="button"
+            class="btn btn-link profile-text-link logout-link mb-2"
+            (click)="onLogout()">
+            Logout
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-link profile-text-link delete-link"
+            (click)="confirmDialog.open()">
+            Delete Account
+          </button>
+
+        </div>
+
+        @if (deleted) {
+          <div class="alert alert-warning mt-3">
+            Your profile has been deleted. You may need to log in again or close this session.
+          </div>
+        }
+      }
+    </div>
+  </div>
+</div>
+
+<app-confirm-delete-dialog
+  #confirmDialog
+  (confirm)="onDelete()">
+</app-confirm-delete-dialog>

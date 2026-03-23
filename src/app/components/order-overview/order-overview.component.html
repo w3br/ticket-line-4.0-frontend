@@ -1,0 +1,350 @@
+<h2 class="mt-3">Upcoming Events</h2>
+<hr />
+@if (loading) {
+  <p>Loading upcoming Events...</p>
+}
+@if (upcomingTicketOrders.length > 0 && !loading) {
+  <table class="table-borderless table-sm align-middle small w-100">
+    <thead>
+    <tr>
+      <th>Event</th>
+      <th>Location</th>
+      <th>Time Of Event</th>
+      <th>Status</th>
+      <th class="text-end">Actions</th>
+    </tr>
+    </thead>
+
+    <tbody>
+      @for (o of pagedUpcomingTicketOrders; track o.id) {
+        <tr>
+            <td>
+              <a
+                [routerLink]="['/events/search-results']"
+                [queryParams]="{ search: o.event }"
+                class="text-decoration-none"
+              >
+              {{ o.event }}
+            </a>
+          </td>
+          <td>
+            <i class="bi bi-geo-alt-fill" style="margin-right: 6px;"></i>
+            <a
+              [routerLink]="['/events/search-results']"
+              [queryParams]="{ venueLabel: o.location }"
+              class="text-decoration-none"
+            >
+              {{ o.location }}
+            </a>
+          </td>
+          <td>{{ o.timeOfEvent | date:'medium' }}</td>
+          <td>{{ o.cancelled ? "Cancelled" : (o.reservation ? 'Reserved · ' + o.reservationCode : 'Purchased') }}
+            @if (o.reservation && !o.cancelled) {
+              <i
+                class="bi bi-info-circle ms-1 text-muted"
+                data-bs-toggle="tooltip"
+                data-bs-placement="top"
+                title="Reservations expire 30 minutes before the event.
+Expired reservations can no longer be purchased and will be automatically cancelled."
+              ></i>
+            }</td>
+
+          <td class="text-end actions">
+            <div class="dropdown">
+              <button
+                class="btn btn-outline-secondary btn-sm dropdown-toggle"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Actions
+              </button>
+
+              <ul class="dropdown-menu dropdown-menu-end">
+                <!-- Cancel -->
+                <li>
+                  <button
+                    class="dropdown-item"
+                    [disabled]="o.cancelled"
+                    (click)="setOrderToCancel(o); confirmDialog.open(
+            o.reservation ? 'Cancel Reservation' : 'Cancel Purchase',
+            o.reservation ? 'Are you sure you want to cancel this reservation?' : 'Are you sure you want to cancel this purchase?',
+            'Yes'
+          )"
+                  >
+                    <i class="bi bi-x-circle me-2 text-danger"></i>
+                    Cancel
+                  </button>
+                </li>
+
+                <!-- Confirm purchase -->
+                <li>
+                  <button
+                    class="dropdown-item"
+                    [disabled]="!o.reservation || o.cancelled"
+                    (click)="purchaseReservation(o.id, o.reservationCode)"
+                  >
+                    <i class="bi bi-bag-check me-2 text-primary"></i>
+                    Confirm purchase
+                  </button>
+                </li>
+
+                <li><hr class="dropdown-divider"></li>
+
+                <!-- Invoice -->
+                <li>
+                  <button
+                    class="dropdown-item"
+                    [disabled]="!!o.reservation || !o.invoiceId"
+                    (click)="downloadInvoice(o.id)"
+                  >
+                    <i class="bi bi-file-earmark-arrow-down me-2"></i>
+                    Download invoice
+                  </button>
+                </li>
+
+                <!-- Cancellation invoice -->
+                <li>
+                  <button
+                    class="dropdown-item"
+                    [disabled]="!o.cancelled || !o.invoiceId"
+                    (click)="downloadCancellationInvoice(o.id)"
+                  >
+                    <i class="bi bi-file-earmark-arrow-down me-2 text-danger"></i>
+                    Download cancellation invoice
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+  <nav class="d-flex justify-content-center mt-2" aria-label="All Orders pagination">
+    <ul class="pagination pagination-sm mb-2 pill-pagination">
+      <li class="page-item" [class.disabled]="currentUpcomingTicketPage === 1">
+        <button class="page-link" type="button" (click)="prevPageUpcoming()">
+          <i class="bi bi-chevron-left"></i>
+        </button>
+      </li>
+
+      @for (p of visibleUpcomingTicketPages; track $index) {
+        @if (p === '...') {
+          <li class="page-item disabled">
+            <span class="page-link">…</span>
+          </li>
+        } @else {
+          <li class="page-item" [class.active]="p === currentUpcomingTicketPage">
+            <button class="page-link" type="button" (click)="goToPageUpcoming(p)">{{ p }}</button>
+          </li>
+        }
+      }
+
+      <li class="page-item" [class.disabled]="currentUpcomingTicketPage === totalUpcomingTicketPages">
+        <button class="page-link" type="button" (click)="nextPageUpcoming()">
+          <i class="bi bi-chevron-right"></i>
+        </button>
+      </li>
+    </ul>
+  </nav>
+} @else {
+  @if (!loading) {
+    <p>No upcoming events found.</p>
+  }
+}
+
+
+<h2 class="mt-3">All Orders</h2>
+<hr />
+
+@if (loading) {
+  <p>Loading Orders...</p>
+}
+
+@if (orders.length > 0 && !loading) {
+  <table class="table-borderless table-sm align-middle small w-100">
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>Item</th>
+      <th>Information</th>
+      <th>Date</th>
+      <th>Total</th>
+      <th class="text-end">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+      @for (o of pagedOrders; track o.id; let i = $index) {
+        <tr>
+          <td>{{ ((currentOrderPage - 1) * entriesPerPage + i + 1 - (orders.length + 1)) * -1}}</td>
+          <td>{{ o.cancelled ? '-' : (o.event ? o.event : 'Merchandise') }}</td>
+          <td>{{ o.cancelled ? (o.purchasedViaReservation ? "Purchased" : "Cancelled") : " " }} {{ (o.reservation ? (o.cancelled ? 'Reservation' : 'Reservation · ' + o.reservationCode) : 'Purchase') }}
+            @if (o.reservation && !o.cancelled) {
+              <i
+                class="bi bi-info-circle ms-1 text-muted"
+                data-bs-toggle="tooltip"
+                data-bs-placement="top"
+                title="Reservations expire 30 minutes before the event.
+Expired reservations can no longer be purchased and will be automatically cancelled."
+              ></i>
+            }</td>
+          <td>{{ o.timeOfOrder | date:'medium' }}</td>
+          <td>{{ o.total | currency:'EUR':'symbol':'1.2-2' }}</td>
+          <td class="text-end actions">
+          <div class="dropdown">
+            <button
+              class="btn btn-outline-secondary btn-sm dropdown-toggle"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Actions
+            </button>
+
+            <ul class="dropdown-menu dropdown-menu-end">
+              <!-- Cancel -->
+              <li>
+                <button
+                  class="dropdown-item"
+                  [disabled]="o.cancelled"
+                  (click)="setOrderToCancel(o); confirmDialog.open(
+            o.reservation ? 'Cancel Reservation' : 'Cancel Purchase',
+            o.reservation ? 'Are you sure you want to cancel this reservation?' : 'Are you sure you want to cancel this purchase?',
+            'Yes'
+          )"
+                >
+                  <i class="bi bi-x-circle me-2 text-danger"></i>
+                  Cancel
+                </button>
+              </li>
+
+              <!-- Confirm purchase -->
+              <li>
+                <button
+                  class="dropdown-item"
+                  [disabled]="!o.reservation || o.cancelled"
+                  (click)="purchaseReservation(o.id, o.reservationCode)"
+                >
+                  <i class="bi bi-bag-check me-2 text-primary"></i>
+                  Confirm purchase
+                </button>
+              </li>
+
+              <li><hr class="dropdown-divider"></li>
+
+              <!-- Invoice -->
+              <li>
+                <button
+                  class="dropdown-item"
+                  [disabled]="!!o.reservation || !o.invoiceId"
+                  (click)="downloadInvoice(o.id)"
+                >
+                  <i class="bi bi-file-earmark-arrow-down me-2"></i>
+                  Download invoice
+                </button>
+              </li>
+
+              <!-- Cancellation invoice -->
+              <li>
+                <button
+                  class="dropdown-item"
+                  [disabled]="!o.cancelled || !o.invoiceId"
+                  (click)="downloadCancellationInvoice(o.id)"
+                >
+                  <i class="bi bi-file-earmark-arrow-down me-2 text-danger"></i>
+                  Download cancellation invoice
+                </button>
+              </li>
+            </ul>
+          </div>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+  <nav class="d-flex justify-content-center mt-2" aria-label="All Orders pagination">
+    <ul class="pagination pagination-sm mb-4 pill-pagination">
+      <li class="page-item" [class.disabled]="currentOrderPage === 1">
+        <button class="page-link" type="button" (click)="prevPage()">
+          <i class="bi bi-chevron-left"></i>
+        </button>
+      </li>
+
+      @for (p of visibleOrderPages; track $index) {
+        @if (p === '...') {
+          <li class="page-item disabled">
+            <span class="page-link">…</span>
+          </li>
+        } @else {
+          <li class="page-item" [class.active]="p === currentOrderPage">
+            <button class="page-link" type="button" (click)="goToPage(p)">{{ p }}</button>
+          </li>
+        }
+      }
+
+      <li class="page-item" [class.disabled]="currentOrderPage === totalOrderPages">
+                <button class="page-link" type="button" (click)="nextPage()">
+          <i class="bi bi-chevron-right"></i>
+        </button>
+      </li>
+    </ul>
+  </nav>
+} @else {
+  @if (!loading) {
+    <p>No orders found.</p>
+  }
+}
+
+@if (showTicketModal) {
+  <div class="modal fade show" style="display:block" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h5 class="modal-title">Select Tickets</h5>
+          <button type="button" class="btn-close" aria-label="Close" (click)="closeTicketModal()"></button>
+        </div>
+
+        <div class="ticket-list">
+          @for (t of reservationTickets; track t.id) {
+            <label class="ticket-row">
+              <input
+                type="checkbox"
+                class="ticket-check"
+                [checked]="selectedTicketIds.includes(t.id)"
+                (change)="onTicketChange(t.id, $event)"
+              />
+              <span class="ticket-text">
+                <div class="ticket-title">{{ t.performanceInfo }} · {{ t.startTime ? (t.startTime | date:'dd.MM.yyyy HH:mm') : '' }}</div>
+                <div class="ticket-meta">
+                  {{ t.placeInfo }} · €{{ t.price }}
+                  · Expires at: {{ t.reservationExpiration ? (t.reservationExpiration | date:'dd.MM.yyyy HH:mm') : '' }}
+                </div>
+              </span>
+            </label>
+          }
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-outline-secondary" type="button" (click)="closeTicketModal()">Cancel</button>
+          <button class="btn btn-primary" type="button"
+                  (click)="addSelectedToCart()"
+                  [disabled]="selectedTicketIds.length === 0">
+            Add to cart
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop fade show"></div>
+}
+
+
+
+<app-confirm-delete-dialog
+  #confirmDialog
+  (confirm)="confirmCancel()">
+</app-confirm-delete-dialog>

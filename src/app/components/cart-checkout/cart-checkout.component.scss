@@ -1,0 +1,68 @@
+.profile-page {
+  margin-top: 3rem;
+}
+
+.profile-page .form-control {
+  border-radius: 6px;
+  background-color: #ffffff;
+  border: 1px solid #e5e5e5;
+  padding: 0.7rem 1.1rem;
+  font-weight: 200;
+}
+
+.profile-submit-btn {
+  border-radius: 6px;
+  padding: 0.8rem 1rem;
+  background-color: #171c26;
+  border: none;
+}
+
+.cart-box {
+  border: 1px solid #efefef;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  background: #fff;
+}
+
+.cart-item {
+  padding: 0.9rem 0;
+}
+
+.cart-item + .cart-item {
+  border-top: 1px solid #f1f1f1;
+}
+
+.cart-item__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.cart-item__title {
+  font-weight: 600;
+}
+
+.cart-item__price {
+  font-weight: 600;
+}
+
+.cart-item__details {
+  margin-top: 0.35rem;
+  color: #444;
+  font-weight: 200;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-top: 0.75rem;
+  border-top: 1px solid #f1f1f1;
+  margin-top: 0.75rem;
+}
+
+.total-amount {
+  font-size: 1.6rem;
+  font-weight: 700;
+}

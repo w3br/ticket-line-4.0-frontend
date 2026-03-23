@@ -1,0 +1,131 @@
+<div class="register-page">
+
+  <div class="register-logo" (click)="goToLanding()">
+    <img src="assets/brand-icon.svg" class="brand-icon" alt="Ticketline Logo">
+    <span class="brand-text">Ticketline</span>
+  </div>
+
+  <div class="register-card-outer">
+    <div class="register-card-inner">
+
+      <h3 class="mb-4">Create Account</h3>
+
+      <form #registrationForm="ngForm" (ngSubmit)="registrationForm.valid && onSubmit()">
+
+        <div class="form-row row mb-3">
+          <div class="col-md-6 mb-3 mb-md-0">
+            <label>First name</label>
+            <input type="text" [(ngModel)]="firstName" name="firstName"
+                   class="form-control"
+                   required minlength="2" maxlength="255"
+                   pattern="^(?!.*\s{2,})[A-Za-zÄÖÜäöüẞß]+(?:[ -][A-Za-zÄÖÜäöüẞß]+)*$"
+                   #firstNameModel="ngModel"
+                   [class.is-invalid]="firstNameModel.invalid && (firstNameModel.touched || registrationForm.submitted)">
+
+            @if (firstNameModel.invalid && (firstNameModel.touched || registrationForm.submitted)) {
+              <small class="invalid-feedback d-sm-block">
+                @if (firstNameModel.errors?.['required']) { First name is required. }
+                @if (firstNameModel.errors?.['minlength']) { First name must be at least 2 characters. }
+                @if (firstNameModel.errors?.['maxlength']) { First name is too long (max 255). }
+                @if (firstNameModel.errors?.['pattern']) {
+                  Only letters, single spaces, and '-' are allowed (no numbers, dots, or multiple spaces).
+                }
+              </small>
+            }
+          </div>
+
+          <div class="col-md-6">
+            <label>Last name</label>
+            <input type="text" [(ngModel)]="lastName" name="lastName"
+                   class="form-control"
+                   required minlength="2" maxlength="255"
+                   pattern="^(?!.*\s{2,})[A-Za-zÄÖÜäöüẞß]+(?:[ -][A-Za-zÄÖÜäöüẞß]+)*$"
+                   #lastNameModel="ngModel"
+                   [class.is-invalid]="lastNameModel.invalid && (lastNameModel.touched || registrationForm.submitted)">
+
+            @if (lastNameModel.invalid && (lastNameModel.touched || registrationForm.submitted)) {
+              <small class="invalid-feedback d-sm-block">
+                @if (lastNameModel.errors?.['required']) { Last name is required. }
+                @if (lastNameModel.errors?.['minlength']) { Last name must be at least 2 characters. }
+                @if (lastNameModel.errors?.['maxlength']) { Last name is too long (max 255). }
+                @if (lastNameModel.errors?.['pattern']) {
+                  Only letters, single spaces, and '-' are allowed (no numbers, dots, or multiple spaces).
+                }
+              </small>
+            }
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group mb-3">
+          <label>Email</label>
+          <input type="email" [(ngModel)]="email" name="email"
+                 class="form-control"
+                 required email maxlength="255"
+                 #emailModel="ngModel"
+                 [class.is-invalid]="emailModel.invalid && (emailModel.touched || registrationForm.submitted)">
+
+          @if (emailModel.invalid && (emailModel.touched || registrationForm.submitted)) {
+            <small class="invalid-feedback d-sm-block">
+              @if (emailModel.errors?.['required']) { Email is required. }
+              @if (emailModel.errors?.['email']) { Please enter a valid email address. }
+              @if (emailModel.errors?.['maxlength']) { Email is too long (max 255). }
+            </small>
+          }
+        </div>
+
+
+        <!-- Password -->
+        <div class="form-group mb-3">
+          <label>Password</label>
+          <input type="password"
+                 [(ngModel)]="password"
+                 name="password"
+                 class="form-control"
+                 required
+                 minlength="8"
+                 #passwordModel="ngModel">
+
+          @if ((passwordModel.touched || registrationForm.submitted) && password) {
+            <small class="invalid-feedback d-sm-block">
+              @if (!hasUppercase(password)) { <div>Password must contain at least one uppercase letter</div> }
+              @if (!hasDigit(password))     { <div>Password must contain at least one digit</div> }
+              @if (!hasSpecial(password))   { <div>Password must contain at least one special character</div> }
+            </small>
+          }
+
+          @if (passwordModel.invalid && (passwordModel.touched || registrationForm.submitted)) {
+            <small class="invalid-feedback d-sm-block">
+              @if (passwordModel.errors?.required) { <div>Password is required!</div> }
+              @if (passwordModel.errors?.minlength) { <div>Must be at least 8 characters!</div> }
+            </small>
+          }
+        </div>
+
+
+        <!-- Confirm Password -->
+        <div class="form-group mb-4">
+          <label>Confirm Password</label>
+          <input type="password" [(ngModel)]="confirmPassword" name="confirmPassword"
+                 class="form-control"  required
+                 #confirmModel="ngModel">
+
+          @if (confirmModel.invalid && (confirmModel.touched || registrationForm.submitted)) {
+            <small class="invalid-feedback d-sm-block">Confirmation is required!</small>
+          }
+        </div>
+
+        <button type="submit" class="btn btn-dark w-100 register-btn" [disabled]= !registrationForm.valid>
+          Create Account
+        </button>
+
+      </form>
+
+      <p class="text-center mt-3 already-text">
+        Already have an account?
+        <a class="login-text" routerLink="/login">Login here</a>
+      </p>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,401 @@
+/* =========================
+   Seating Grid Layout
+   ========================= */
+
+.seating-grid {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+
+  .row {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    align-items: center;
+    column-gap: 0.75rem;
+  }
+
+  .row-label {
+    min-width: 3rem;
+    margin: 0;
+    font-size: 0.75rem;
+    color: #6b7280;
+    white-space: nowrap;
+  }
+
+  .row-label--left { text-align: right; }
+  .row-label--right { text-align: left; }
+
+  .row-seats {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0.25rem;
+  }
+}
+
+.seat {
+  position: relative;
+}
+
+.seat.accessible {
+  outline: 2px dashed #0ea5e9;
+  outline-offset: 1px;
+}
+
+.seat-accessible-icon {
+  position: absolute;
+  top: -7px;
+  left: -7px;
+  font-size: 0.85rem;
+  line-height: 1;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 999px;
+  padding: 1px 3px;
+}
+
+/* =========================
+   Seat Styling + States
+   ========================= */
+
+.seat {
+  min-width: 24px;
+  height: 24px;
+  padding: 0 0.25rem;
+  border-radius: 0.4rem;
+  border: 1px solid transparent;
+
+  font-size: 0.7rem;
+  line-height: 1;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  background-color: #f9fafb;
+
+  transition:
+    transform 0.05s ease,
+    box-shadow 0.05s ease,
+    background-color 0.1s ease,
+    border-color 0.1s ease;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.12);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &.free {
+    --seat-free-color: #fee2e2;
+    background-color: var(--seat-free-color);
+    border-color: #fecaca;
+    color: #7f1d1d;
+  }
+
+  &.reserved {
+    background-color: #e5e7eb;
+    border-color: #9ca3af;
+    color: #374151;
+  }
+
+  &.sold {
+    background-color: #111827;
+    border-color: #111827;
+    color: #f9fafb;
+    cursor: not-allowed;
+  }
+
+  &.selected {
+    background-color: #2563eb;
+    border-color: #1d4ed8;
+    color: #ffffff;
+  }
+}
+
+
+/* Sector-based free colors */
+.seat.free[data-sector*='Cinema'],
+.seat.free[data-sector*='Stalls'],
+.seat.free[data-sector*='Lower Tier'] {
+  --seat-free-color: #fee2e2;
+}
+
+.seat.free[data-sector*='Balcony'],
+.seat.free[data-sector*='Upper Tier'],
+.seat.free[data-sector*='Tier 2'] {
+  --seat-free-color: #dbeafe;
+}
+
+.seat.free[data-sector*='Tier 1'] {
+  --seat-free-color: #fef3c7;
+}
+
+.seat.free[data-sector*='Boxes'],
+.seat.free[data-sector*='VIP'] {
+  --seat-free-color: #fae8ff;
+}
+
+.seat.free[data-sector*='Standing Floor'],
+.seat.free[data-sector*='Floor'] {
+  --seat-free-color: #bfdbfe;
+}
+
+.seat.free[data-sector*='Side Tribune'] {
+  --seat-free-color: #dcfce7;
+}
+
+/* Stalls variants -> same as Stalls (red) */
+.seat.free[data-sector*='Stalls Center'] {
+  --seat-free-color: #fee2e2;
+}
+
+/* Premium / close-to-stage -> amber */
+.seat.free[data-sector*='Premium'],
+.seat.free[data-sector*='So Close'] {
+  --seat-free-color: #fef3c7;
+}
+
+/* Standard-ish price tiers (optional grouping) */
+.seat.free[data-sector*='Standard'] {
+  --seat-free-color: #fee2e2;
+}
+.seat.free[data-sector*='Medium'] {
+  --seat-free-color: #fae8ff;
+}
+.seat.free[data-sector*='Great Value'] {
+  --seat-free-color: #dcfce7;
+}
+
+/* Balcony variants -> same as Balcony (blue) */
+.seat.free[data-sector*='Balcony Back'],
+.seat.free[data-sector*='Balcony Left'],
+.seat.free[data-sector*='Balcony Right'] {
+  --seat-free-color: #dbeafe;
+}
+
+/* Boxes variants -> same as Boxes (purple) */
+.seat.free[data-sector*='Boxes left'],
+.seat.free[data-sector*='Boxes right'] {
+  --seat-free-color: #fae8ff;
+}
+
+/* Seated Area variants -> treat as "Tier 1" (amber) */
+.seat.free[data-sector*='Seated Area'],
+.seat.free[data-sector*='Seated Area Left'],
+.seat.free[data-sector*='Seated Area Right'] {
+  --seat-free-color: #fef3c7;
+}
+
+/* Side Tribune variants -> same as Side Tribune (green) */
+.seat.free[data-sector*='Side Tribune Left'],
+.seat.free[data-sector*='Side Tribune Right'] {
+  --seat-free-color: #dcfce7;
+}
+
+/* Standing variants -> same as Standing Floor (light blue) */
+.seat.free[data-sector*='Standing Area'],
+.seat.free[data-sector*='Standing Area North'],
+.seat.free[data-sector*='Standing Area South'],
+.seat.free[data-sector*='Standing Regular'],
+.seat.free[data-sector*='Standing VIP'],
+.seat.free[data-sector*='Front Standing'],
+.seat.free[data-sector*='Back Standing'],
+.seat.free[data-sector*='To What'] {
+  --seat-free-color: #bfdbfe;
+}
+
+/* Circle -> give it a distinct but still in your palette (purple) */
+.seat.free[data-sector*='Circle'] {
+  --seat-free-color: #fae8ff;
+}
+/* =========================
+   Stage / Pitch
+   ========================= */
+
+.stage {
+  background: #f3f4f6;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  text-align: center;
+  font-weight: 600;
+  margin: 0.75rem 0 1.25rem;
+}
+
+/* =========================
+   Concert Layout
+   ========================= */
+
+.concert-grid {
+  display: grid;
+  grid-template-columns: 1fr minmax(220px, 320px) 1fr;
+  column-gap: 1.5rem;
+  row-gap: 0.75rem;
+  align-items: start;
+  justify-items: stretch;
+}
+
+.concert-cell--left { justify-self: end; }
+.concert-cell--right { justify-self: start; }
+
+.concert-cell--standing {
+  grid-column: 2;
+  align-self: stretch;
+}
+
+/* =========================
+   Standing UI
+   ========================= */
+
+.standing-area {
+  margin: 0 0 1.25rem;
+  display: flex;
+  justify-content: center;
+}
+
+.standing-field {
+  width: min(980px, 100%);
+  min-height: 160px;
+  border-radius: 0.75rem;
+  border: 2px dashed #cbd5e1;
+  background: #f8fafc;
+  padding: 1rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  cursor: pointer;
+  user-select: none;
+
+  &.is-selected {
+    border-style: solid;
+    background: #eef2ff;
+  }
+
+  &.is-disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.standing-field__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.standing-field__title {
+  font-weight: 800;
+}
+
+.standing-field__meta {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.standing-field__hint {
+  text-align: center;
+  opacity: 0.75;
+}
+
+.standing-field__controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+
+
+.standing-title {
+  font-weight: 700;
+  text-align: center;
+}
+
+.standing-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 0.5rem;
+  border: 1px solid #d1d5db;
+  background: white;
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.standing-count {
+  min-width: 40px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.selection-summary {
+  margin-left: 0.5rem;
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+.sector-overview {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: #fff;
+  padding: 0.5rem 0;
+  margin: 0 0 1rem 0;
+  border-bottom: 1px solid #e9ecef;
+
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.sector-chip {
+  flex: 0 0 auto;
+  border: 1px solid #dee2e6;
+  background: #f8f9fa;
+  border-radius: 999px;
+  padding: 0.4rem 0.75rem;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.sector-chip.active {
+  background: #0d6efd;
+  border-color: #0d6efd;
+  color: #fff;
+}
+
+.sector-chip__name {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.sector-chip__meta {
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+
+.standing-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin: 0 auto 1.25rem auto;
+  max-width: 980px;
+}
+
+.standing-field {
+  width: 100%;
+}
+
+.standing-field--vip {
+  border-width: 2px;
+}

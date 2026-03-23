@@ -1,0 +1,27 @@
+<div class="landing">
+  <div class="bg"></div>
+  <div class="overlay"></div>
+
+  <div class="intro" *ngIf="showIntro" [@introAnim]>
+    <img src="assets/brand-icon.svg" class="intro-icon" alt="Ticketline Logo" />
+    <div class="intro-text">Ticketline</div>
+  </div>
+
+  <main class="hero left" *ngIf="showHero" [@heroAnim]>
+
+    <div class="brand">
+      <img src="assets/brand-icon.svg" class="brand-icon" alt="Ticketline Logo" />
+      <span class="brand-text">Ticketline</span>
+    </div>
+
+    <h1 class="headline">Find your next event.</h1>
+    <p class="lead">Fast checkout. Secure tickets. Instant delivery.</p>
+
+    <div class="actions">
+      <a class="btn btn-light hero-btn" routerLink="/login">Login</a>
+      <a class="btn btn-light hero-btn" routerLink="/register">Register</a>
+    </div>
+  </main>
+
+  <footer class="footer">© Ticketline</footer>
+</div>

@@ -1,0 +1,20 @@
+<div class="confirm-backdrop" *ngIf="visible">
+  <div class="confirm-dialog">
+    <h5 class="mb-3">{{ title }}</h5>
+    <p class="mb-4">{{ message }}</p>
+
+    <div class="d-flex gap-2 justify-content-around">
+      <button type="button"
+              class="btn btn-secondary flex-fill"
+              (click)="close()">
+        Cancel
+      </button>
+
+      <button type="button"
+              class="btn btn-danger flex-fill"
+              (click)="onConfirmClick()">
+        {{ confirmButtonText }}
+      </button>
+    </div>
+  </div>
+</div>

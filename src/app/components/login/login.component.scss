@@ -1,0 +1,75 @@
+.login-page {
+  background-color: #ffffff;
+  min-height: 100vh;
+  padding-top: 3rem;
+}
+
+.login-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 4rem;
+}
+
+
+.login-logo :hover {
+  cursor: pointer;
+}
+
+.brand-icon {
+  height: 48px;
+}
+
+.brand-text {
+  font-family: 'Syne', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.login-card-outer {
+  background: #ffffff;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  border-radius: 20px;
+  padding: 3rem 2.5rem;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+}
+
+.login-card-inner {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.form-control {
+  border-radius: 6px;
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  padding: 0.7rem 1.1rem;
+}
+
+.login-btn {
+  border-radius: 6px;
+  padding: 0.8rem;
+  background-color: #171c26;
+  border: none;
+}
+
+.link-muted {
+  color: #999;
+}
+.login-links .btn-link {
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+.login-links .btn-link:hover {
+  font-size: 0.9rem;
+  text-decoration: underline;
+}
+
+.forgot-text{
+  font-size: 0.9rem;
+  color: #666;
+}

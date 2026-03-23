@@ -1,0 +1,9 @@
+<div class="events-grid">
+  <!-- Real event cards -->
+  <app-event-card
+    *ngFor="let event of events"
+    [event]="event"
+    (deleted)="eventDeleted.emit($event)">
+  </app-event-card>
+
+</div>

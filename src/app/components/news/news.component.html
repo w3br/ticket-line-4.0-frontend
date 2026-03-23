@@ -1,0 +1,149 @@
+<div class="news-page">
+
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="mb-0">{{ mode === 'unread' ? '' : 'News History' }}</h4>
+
+    <div class="btn-group">
+      <a class="btn"
+         [ngClass]="mode === 'unread' ? 'btn-dark' : 'btn-outline-dark'"
+         [routerLink]="['/news/unread']">
+        Unread
+      </a>
+      <a class="btn"
+         [ngClass]="mode === 'read' ? 'btn-dark' : 'btn-outline-dark'"
+         [routerLink]="['/news/read']">
+        Read
+      </a>
+    </div>
+  </div>
+
+  @if (error) {
+    <div class="alert alert-danger" (click)="error = false">
+      {{ errorMessage }}
+    </div>
+  }
+
+  @if (pagedNews?.length > 0) {
+
+    @for (news of pagedNews; track news) {
+
+      <div class="news-card mb-4" [class.news-card-read]="mode === 'read'">
+        <div class="news-card-body">
+
+          <h5 class="news-card-title">{{ news.title }}</h5>
+          <div class="news-card-date">{{ news.publishedAt | date:'dd.MM.yyyy' }}</div>
+
+          @if (news.images && news.images.length > 0) {
+
+            <!-- If more than 1 image -> Bootstrap Carousel -->
+            @if (news.images.length > 1) {
+              <div class="news-media mt-2 mb-3">
+                <div
+                  class="carousel slide"
+                  [attr.id]="'newsCarousel' + news.id"
+                  data-bs-ride="carousel"
+                  data-bs-interval="3500"
+                  data-bs-pause="hover"
+                >
+                  <div class="carousel-inner">
+                    @for (img of news.images; track img) {
+                      <div class="carousel-item" [class.active]="$index === 0">
+                        <img
+                          class="d-block w-100 news-card-img"
+                          [src]="getImageUrl(img.path)"
+                          [alt]="news.title"
+                          loading="lazy"
+                        />
+                      </div>
+                    }
+                  </div>
+
+                  <button class="carousel-control-prev" type="button"
+                          [attr.data-bs-target]="'#newsCarousel' + news.id"
+                          data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                  </button>
+
+                  <button class="carousel-control-next" type="button"
+                          [attr.data-bs-target]="'#newsCarousel' + news.id"
+                          data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                  </button>
+                </div>
+              </div>
+            } @else {
+              <!-- Exactly 1 image -->
+              <div class="news-media mt-2 mb-3">
+                <img
+                  [src]="getImageUrl(news.images[0].path)"
+                  alt="{{ news.title }}"
+                  class="news-card-img"
+                  loading="lazy"
+                />
+              </div>
+            }
+          }
+
+          <p class="news-card-summary">{{ news.summary }}</p>
+
+          <div class="d-flex gap-2 flex-wrap">
+            <button
+              type="button"
+              class="btn btn-news-detail"
+              (click)="markAsRead(news.id)"
+              [routerLink]="['/news', news.id]">
+              Detail
+            </button>
+
+            @if (mode === 'read') {
+              <button
+                type="button"
+                class="btn btn-outline-secondary"
+                (click)="markAsUnread(news.id)">
+                Mark as unread
+              </button>
+            }
+          </div>
+
+        </div>
+      </div>
+
+    }
+
+    @if (totalPages > 1) {
+      <nav class="mt-3 d-flex justify-content-center">
+        <ul class="pagination mb-4 pill-pagination">
+
+          <li class="page-item" [class.disabled]="currentPage === 1">
+            <button class="page-link" type="button" (click)="prevPage()">
+              <i class="bi bi-chevron-left"></i>
+            </button>
+          </li>
+
+          @for (p of visiblePages; track p) {
+            <li class="page-item" [class.active]="p === currentPage">
+              <button class="page-link" type="button" (click)="goToPage(p)">
+                {{ p }}
+              </button>
+            </li>
+          }
+
+          <li class="page-item" [class.disabled]="currentPage === totalPages">
+            <button class="page-link" type="button" (click)="nextPage()">
+              <i class="bi bi-chevron-right"></i>
+            </button>
+          </li>
+
+        </ul>
+      </nav>
+    }
+
+  } @else {
+    <p class="text-muted mt-3">
+      {{ mode === 'unread' ? 'No unread news.' : 'No read news.' }}
+    </p>
+  }
+
+</div>

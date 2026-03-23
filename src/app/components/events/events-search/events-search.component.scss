@@ -1,0 +1,331 @@
+.search-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 2rem;
+}
+
+.search-form input {
+  border: 1px solid #cfd4dc;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+
+.filter-field {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.clear-input {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #9ca3af;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.clear-input:hover {
+  color: #4b5563;
+}
+
+/* Search input */
+.search-input {
+  width: 100%;
+  padding: 0.75rem 2.5rem 0.75rem 3rem;
+  font-size: 1rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%239ca3af' stroke-width='2' viewBox='0 0 24 24'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: 0.9rem center;
+  background-size: 1.1rem;
+}
+
+/* Filters row */
+.filters-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.date-field {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Make all inputs look consistent */
+.filters-row input {
+  width: 100%;
+  padding: 0.6rem 2.2rem 0.6rem 2.5rem;
+  font-size: 0.95rem;
+  border: 1px solid #cfd4dc;
+  border-radius: 6px;
+  height: 40px;
+  box-sizing: border-box;
+}
+
+/* No icon for the date fields */
+.date-field input {
+  padding: 0.6rem 0.8rem 0.6rem 0.8rem;
+}
+
+.icon-artist {
+  box-sizing: border-box;
+
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%239ca3af' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: 0.9rem center;
+  background-size: 1.1rem;
+}
+
+.icon-venue {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%239ca3af' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='M12 21s-6-5.686-6-10a6 6 0 1 1 12 0c0 4.314-6 10-6 10z'/%3E%3Ccircle cx='12' cy='11' r='2'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: 0.9rem center;
+  background-size: 1.1rem;
+}
+
+.icon-time {
+  box-sizing: border-box;
+
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%239ca3af' stroke-width='2' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 7v5l3 3'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: 0.9rem center;
+  background-size: 1.1rem;
+}
+
+.icon-price {
+  box-sizing: border-box;
+
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%239ca3af' stroke-width='2' viewBox='0 0 24 24'%3E%3Crect x='2' y='6' width='20' height='12' rx='2'/%3E%3Ccircle cx='12' cy='12' r='2'/%3E%3Cpath d='M6 12h.01M18 12h.01'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: 0.9rem center;
+  background-size: 1.1rem;
+}
+
+/* No icon for the date and price fields */
+.date-field input,
+.icon-price {
+  padding-right: 0.8rem !important;
+}
+
+.date-field input {
+  padding-left: 1rem;
+}
+
+
+/* Button */
+.search-btn {
+  align-self: flex-start;
+
+  padding: 0.6rem 1.5rem;
+  border-radius: 6px;
+  border: none;
+
+  background-color: #1f2937;
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 500;
+
+  cursor: pointer;
+}
+
+.search-btn:hover {
+  background-color: #111827;
+}
+
+.top-ten-container {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+}
+
+.top-ten-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+
+  h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #1f2937;
+  }
+}
+
+.top-ten-filters {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-end;
+}
+
+.top-filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  label {
+    font-size: 0.85rem;
+    color: #6c757d;
+    font-weight: 500;
+  }
+
+  input, select {
+    padding: 0.4rem 0.6rem;
+    border: 1px solid #cfd4dc;
+    border-radius: 4px;
+    font-size: 0.9rem;
+  }
+
+  .input-group {
+    width: auto;
+    flex-wrap: nowrap;
+
+    input.form-control {
+      width: 120px;
+      background-color: white;
+      cursor: pointer;
+    }
+  }
+}
+
+.top-ten-content {
+  min-height: 100px;
+}
+
+.loading-state, .empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  color: #6c757d;
+  gap: 1rem;
+}
+
+.top-event-wrapper {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  app-event-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.rank-badge {
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  background-color: #1f2937;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.9rem;
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Original search grid (now below top 10) */
+.top-ten-grid {
+  app-event-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    /* Ensure image has fixed aspect ratio even in Bootstrap grid */
+    ::ng-deep .event-card-img {
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+    }
+  }
+}
+
+.top-events-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); // 5 per row on large screens
+  gap: 1.5rem;
+
+  app-event-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+/* Ensure both cards and placeholders behave the same */
+.top-events-grid > * {
+  min-height: 420px;
+}
+
+/* Placeholder styling */
+.placeholder {
+  background-color: #e5e5e5;
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+/* Suggestions dropdown */
+
+.autocomplete {
+  position: relative;
+  overflow: visible;
+}
+
+.suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+
+  margin: 0;
+  padding: 6px 0;
+  list-style: none;
+
+  background: #fff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.suggestions li {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.suggestions li:hover {
+  background-color: #f5f6f8;
+}
+
+

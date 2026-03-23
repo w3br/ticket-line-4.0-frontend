@@ -1,0 +1,7 @@
+<app-header *ngIf="!hideHeader"></app-header>
+
+<div [class.container]="!isFullBleed" [class.full-bleed]="isFullBleed">
+  <router-outlet></router-outlet>
+</div>
+
+<app-footer></app-footer>

@@ -1,0 +1,183 @@
+@if (!plan) {
+  <div>Loading seating plan…</div>
+}
+
+@if (plan) {
+
+  <div class="sector-overview">
+    <button
+      type="button"
+      class="sector-chip"
+      [class.active]="selectedSectorId === 'ALL'"
+      (click)="onSectorChange('ALL')"
+    >
+      <div class="sector-chip__name">All sectors</div>
+    </button>
+
+    @for (sector of plan.sectors; track sector.id) {
+      <button
+        type="button"
+        class="sector-chip"
+        [class.active]="selectedSectorId === String(sector.id)"
+        (click)="onSectorChange(String(sector.id))"
+      >
+        <div class="sector-chip__name">{{ sector.name }}</div>
+        <div class="sector-chip__meta">
+          {{ sector.price | number:'1.2-2' }} € · {{ sectorOverviewMeta(sector) }}
+        </div>
+      </button>
+    }
+  </div>
+
+  <div class="legend">
+    <span class="seat free"></span> free
+    <span class="seat sold"></span> sold
+    <span class="seat selected"></span> selected
+    <span class="seat accessible"><span class="seat-accessible-icon" aria-hidden="true">♿</span></span> accessible
+  </div>
+
+  @if (showStage) {
+    <div class="stage">{{ stageLabel }}</div>
+  }
+
+  @if (standingVipSectors.length + standingRegularSectors.length > 0) {
+    <div class="standing-layout">
+      @for (sector of standingVipSectors; track sector.id) {
+        <div
+          class="standing-field standing-field--vip"
+          [class.is-selected]="getStandingSelected(sector) > 0"
+          [class.is-disabled]="(sector.standingFree ?? 0) === 0 || !canIncreaseStanding(sector)"
+          (click)="canIncreaseStanding(sector) && changeStandingSelection(sector, +1, $event)"
+          role="button"
+          tabindex="0"
+        >
+          <div class="standing-field__header">
+            <div class="standing-field__title">{{ getStandingDisplayTitle(sector) }}</div>
+            <div class="standing-field__meta">
+              {{ sector.price | number:'1.2-2' }} € ·
+              Free: {{ sector.standingFree ?? 0 }} / {{ sector.standingCapacity ?? '-' }}
+            </div>
+          </div>
+
+          <div class="standing-field__hint">Click anywhere to add 1 standing place</div>
+
+          <div class="standing-field__controls" (click)="$event.stopPropagation()">
+            <button
+              type="button"
+              class="standing-btn"
+              (click)="changeStandingSelection(sector, -1, $event)"
+              [disabled]="(sector.standingFree ?? 0) === 0 || !canIncreaseStanding(sector)"
+            >−</button>
+
+            <div class="standing-count">{{ getStandingSelected(sector) }}</div>
+
+            <button
+              type="button"
+              class="standing-btn"
+              (click)="canIncreaseStanding(sector) && changeStandingSelection(sector, +1, $event)"
+              [disabled]="(sector.standingFree ?? 0) === 0 || !canIncreaseStanding(sector)"
+            >+</button>
+          </div>
+        </div>
+      }
+
+      @for (sector of standingRegularSectors; track sector.id) {
+        <div
+          class="standing-field standing-field--regular"
+          [class.is-selected]="getStandingSelected(sector) > 0"
+          [class.is-disabled]="(sector.standingFree ?? 0) === 0 || !canIncreaseStanding(sector)"
+          (click)="canIncreaseStanding(sector) && changeStandingSelection(sector, +1, $event)"
+          role="button"
+          tabindex="0"
+        >
+          <div class="standing-field__header">
+            <div class="standing-field__title">{{ getStandingDisplayTitle(sector) }}</div>
+            <div class="standing-field__meta">
+              {{ sector.price | number:'1.2-2' }} € ·
+              Free: {{ sector.standingFree ?? 0 }} / {{ sector.standingCapacity ?? '-' }}
+            </div>
+          </div>
+
+          <div class="standing-field__hint">Click anywhere to add 1 standing place</div>
+
+          <div class="standing-field__controls" (click)="$event.stopPropagation()">
+            <button
+              type="button"
+              class="standing-btn"
+              (click)="changeStandingSelection(sector, -1, $event)"
+              [disabled]="getStandingSelected(sector) === 0"
+            >−</button>
+
+            <div class="standing-count">{{ getStandingSelected(sector) }}</div>
+
+            <button
+              type="button"
+              class="standing-btn"
+              (click)="canIncreaseStanding(sector) && changeStandingSelection(sector, +1, $event)"
+              [disabled]="(sector.standingFree ?? 0) === 0 || !canIncreaseStanding(sector)"
+            >+</button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+
+  <div class="seating-grid" [ngClass]="layoutClass">
+    @for (row of seatRows; track row.rowNumber) {
+      <div class="row">
+        <div class="row-label row-label--left">Row {{ row.rowNumber }}</div>
+
+        <div class="row-seats">
+          @for (seat of row.seats; track seat.id) {
+            <button
+              type="button"
+              class="seat"
+              [class.accessible]="!!seat.accessible"
+              [attr.data-sector]="seat.sectorName"
+              [ngClass]="{
+              free: seat.status === 'FREE' && !isSelected(seat),
+              reserved: seat.status === 'RESERVED',
+              sold: seat.status === 'SOLD',
+              selected: isSelected(seat)
+            }"
+              [disabled]="!canSelect(seat) || (isAtTicketLimit && !isSelected(seat))"
+              (click)="toggleSeat(seat)"
+              [title]="'Row ' + row.rowNumber + ', Seat ' + seat.number
+               + (isAccessibleSeat(seat) ? ' · Accessible' : '')
+               + ' · ' + seat.sectorName
+               + ' · Kat ' + seat.priceCategory
+               + ' · ' + (seat.price | number:'1.2-2') + ' €'"
+            >
+              @if (isAccessibleSeat(seat)) {
+                <span class="seat-accessible-icon" aria-hidden="true">♿</span>
+              }
+              <span class="seat-number">{{ seat.number }}</span>
+            </button>
+          }
+        </div>
+
+        <div class="row-label row-label--right" aria-hidden="true">Row {{ row.rowNumber }}</div>
+      </div>
+    }
+  </div>
+
+  <div class="actions">
+    <div >
+      Selected: {{ totalTicketsSelected }} / {{ MAX_TICKETS_PER_USER }} tickets
+      ({{ selectedSeatIds.size }} seats, {{ totalStandingSelected }} standing)
+    </div>
+
+    <div class="mb-3">
+      Total Price: {{ totalPrice | number:'1.2-2' }} €
+      @if (selectionSummary) {
+        <span class="selection-summary">({{ selectionSummary }})</span>
+      }
+    </div>
+
+    <div class="actions__buttons">
+      <button type="button" class="btn btn-primary me-2" (click)="onReserveClicked()" [disabled]="!hasSelection">Reserve</button>
+      <button type="button" class="btn btn-success" (click)="onAddToCartClicked()" [disabled]="!hasSelection">Add to cart</button>
+    </div>
+  </div>
+}

@@ -1,0 +1,88 @@
+.landing { position: relative; width: 100vw; min-height: 100vh; overflow: hidden; }
+.bg {
+  position: absolute; inset: 0;
+  background: url("/assets/landing-background.jpg") center / cover no-repeat;
+  transform: scale(1.03);
+}
+.overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.55); }
+
+.intro {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+
+  text-align: left;
+  color: #fff;
+
+  opacity: 0;
+  animation: introInOut 1600ms ease-in-out forwards;
+}
+
+.intro-icon {
+  height: 86px;
+  width: auto;
+  filter: brightness(0) invert(1) drop-shadow(0 12px 30px rgba(0,0,0,0.45));
+  margin: 0;
+}
+
+.intro-text {
+  font-family: "Syne", sans-serif;
+  font-size: 4.2rem;
+  font-weight: 700;
+  line-height: 1;
+  margin: 0;
+  text-shadow: 0 12px 35px rgba(0,0,0,0.45);
+}
+
+
+.hero.left{
+  position: relative; z-index: 1;
+  min-height: 100vh;
+  display: flex; flex-direction: column; justify-content: center;
+  align-items: flex-start; text-align: left;
+  padding: 5rem 1.25rem 4rem;
+  max-width: 920px; margin: 0 auto; width: 100%;
+}
+
+.brand { display: flex; align-items: center; gap: 14px; margin-bottom: 1.6rem; }
+.brand-icon { height: 54px; filter: brightness(0) invert(1) drop-shadow(0 10px 25px rgba(0,0,0,0.35)); }
+.brand-text { font-family: "Syne", sans-serif; font-size: 2.4rem; font-weight: 700; color:#fff; }
+
+.headline {
+  font-size: clamp(2.8rem, 6vw, 4.6rem);
+  line-height: 1.02;
+  margin: 0 0 1rem 0;
+  color: #fff;
+  text-shadow: 0 12px 35px rgba(0,0,0,0.45);
+}
+
+.lead {
+  margin: 0 0 2.6rem 0;
+  max-width: 640px;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.82);
+}
+
+.actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.hero-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  min-width: 120px;
+}
+
+.footer {
+  position: absolute;
+  left: 50%;
+  bottom: 1.25rem;
+  transform: translateX(-50%);
+  z-index: 1;
+  color: rgba(255,255,255,0.75);
+  font-size: 0.95rem;
+}

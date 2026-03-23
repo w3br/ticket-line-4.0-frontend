@@ -1,0 +1,204 @@
+<div class="results-header">
+  <h2>
+    {{ isPerformanceMode ? 'Found Performances' : 'Found Events' }}
+  </h2>
+  <button class="back-btn" (click)="goBackToSearch()">Back To Search</button>
+</div>
+
+
+<div class="results-layout">
+  <div class ="result-main">
+    <app-events-grid
+      *ngIf="!isPerformanceMode"
+      [events]="pagedEvents"
+      (eventDeleted)="onEventDeleted($event)">
+    </app-events-grid>
+
+    <nav class="d-flex justify-content-center mt-2" aria-label="All Events pagination" *ngIf="!isPerformanceMode">
+      <ul class="pagination pagination-sm mb-0 pill-pagination">
+        <li class="page-item" [class.disabled]="currentEventPage === 1">
+          <button class="page-link" type="button" (click)="prevEventPage()">
+            <i class="bi bi-chevron-left"></i>
+          </button>
+        </li>
+
+        @for (p of visibleEventPages; track $index) {
+          @if (p === '...') {
+            <li class="page-item disabled">
+              <span class="page-link">…</span>
+            </li>
+          } @else {
+            <li class="page-item" [class.active]="p === currentEventPage">
+              <button class="page-link" type="button" (click)="goToEventPage(p)">{{ p }}</button>
+            </li>
+          }
+        }
+
+        <li class="page-item" [class.disabled]="currentEventPage === totalEventPages">
+          <button class="page-link" type="button" (click)="nextEventPage()">
+            <i class="bi bi-chevron-right"></i>
+          </button>
+        </li>
+      </ul>
+    </nav>
+
+    <div *ngIf="isPerformanceMode">
+      <div *ngIf="performances.length > 0" class="performances-grid">
+        <app-performance-card
+          *ngFor="let p of pagedPerformances"
+          [performance]="p">
+        </app-performance-card>
+      </div>
+    </div>
+
+    <nav class="d-flex justify-content-center mt-2" aria-label="All Orders pagination" *ngIf="isPerformanceMode">
+      <ul class="pagination pagination-sm mb-0 pill-pagination">
+        <li class="page-item" [class.disabled]="currentPerformancePage === 1">
+          <button class="page-link" type="button" (click)="prevPerformancePage()">
+            <i class="bi bi-chevron-left"></i>
+          </button>
+        </li>
+
+        @for (p of visiblePerformancePages; track $index) {
+          @if (p === '...') {
+            <li class="page-item disabled">
+              <span class="page-link">…</span>
+            </li>
+          } @else {
+            <li class="page-item" [class.active]="p === currentPerformancePage">
+              <button class="page-link" type="button" (click)="goToPerformancePage(p)">{{ p }}</button>
+            </li>
+          }
+        }
+
+        <li class="page-item" [class.disabled]="currentPerformancePage === totalPerformancePages">
+          <button class="page-link" type="button" (click)="nextPerformancePage()">
+            <i class="bi bi-chevron-right"></i>
+          </button>
+        </li>
+      </ul>
+    </nav>
+
+  </div>
+  <aside class="filters-panel">
+    <div class="filters-header">
+      <h3>Filters</h3>
+      <button
+        class="clear-btn"
+        (click)="clearFilters()"
+        [disabled]="!hasAnyFilters()"
+      >
+        Clear all
+      </button>
+    </div>
+
+    <div *ngIf="activeEventFilters.text" class="filter-chip">
+      <div class="chip-content">
+        <span class="label">Search</span>
+        <span class="value">"{{ activeEventFilters.text }}"</span>
+      </div>
+      <button class="remove-filter" (click)="removeFilter('search')" title="Remove filter">×</button>
+    </div>
+
+    <div *ngIf="activeEventFilters.artistId !== undefined || activeEventFilters.artistName" class="filter-chip">
+      <div class="chip-content">
+        <span class="label">Artist</span>
+        <span class="value">
+          {{ activeEventFilters.artistName || selectedArtistName || ('#' + activeEventFilters.artistId) }}
+        </span>
+      </div>
+      <button class="remove-filter" (click)="removeFilter(['artistId', 'artistName'])" title="Remove filter">×</button>
+    </div>
+
+    <div *ngIf="activeEventFilters.city" class="filter-chip">
+      <div class="chip-content">
+        <span class="label">City</span>
+        <span class="value">{{ activeEventFilters.city }}</span>
+      </div>
+      <button class="remove-filter" (click)="removeFilter('city')" title="Remove filter">×</button>
+    </div>
+
+    <div *ngIf="activeEventFilters.dateFrom || activeEventFilters.dateTo" class="filter-chip">
+      <div class="chip-content">
+        <span class="label">Date</span>
+        <span class="value">
+          {{ activeEventFilters.dateFrom || 'Any' }} – {{ activeEventFilters.dateTo || 'Any' }}
+        </span>
+      </div>
+      <button class="remove-filter" (click)="removeFilter(['dateFrom', 'dateTo'])" title="Remove filter">×</button>
+    </div>
+
+    <!-- PERFORMANCE MODE -->
+    <div *ngIf="isPerformanceMode">
+      <div *ngIf="activePerformanceFilters.search" class="filter-chip">
+        <div class="chip-content">
+          <span class="label">Search</span>
+          <span class="value">"{{ activePerformanceFilters.search }}"</span>
+        </div>
+        <button class="remove-filter" (click)="removeFilter('search')" title="Remove filter">×</button>
+      </div>
+
+      <div *ngIf="activePerformanceFilters.venueId !== undefined || activePerformanceFilters.venueLabel" class="filter-chip">
+        <div class="chip-content">
+          <span class="label">Venue</span>
+          <span class="value">
+            {{ activePerformanceFilters.venueLabel || ('#' + activePerformanceFilters.venueId) }}
+          </span>
+        </div>
+        <button class="remove-filter" (click)="removeFilter(['venueId', 'venueLabel'])" title="Remove filter">×</button>
+      </div>
+
+      <div *ngIf="activePerformanceFilters.artistId !== undefined || activePerformanceFilters.artistName" class="filter-chip">
+        <div class="chip-content">
+          <span class="label">Artist</span>
+          <span class="value">
+            {{ activePerformanceFilters.artistName || ('#' + activePerformanceFilters.artistId) }}
+          </span>
+        </div>
+        <button class="remove-filter" (click)="removeFilter(['artistId', 'artistName'])" title="Remove filter">×</button>
+      </div>
+
+      <div *ngIf="activePerformanceFilters.from || activePerformanceFilters.to" class="filter-chip">
+        <div class="chip-content">
+          <span class="label">Date</span>
+          <span class="value">
+            {{ activePerformanceFilters.from || 'Any' }} – {{ activePerformanceFilters.to || 'Any' }}
+          </span>
+        </div>
+        <button class="remove-filter" (click)="removeFilter(['from', 'to', 'dateFrom', 'dateTo'])" title="Remove filter">×</button>
+      </div>
+
+      <div *ngIf="activePerformanceFilters.minPrice !== undefined || activePerformanceFilters.maxPrice !== undefined" class="filter-chip">
+        <div class="chip-content">
+          <span class="label">Price</span>
+          <span class="value">
+            {{ activePerformanceFilters.minPrice !== undefined ? activePerformanceFilters.minPrice + '€' : 'Any' }}
+            –
+            {{ activePerformanceFilters.maxPrice !== undefined ? activePerformanceFilters.maxPrice + '€' : 'Any' }}
+          </span>
+        </div>
+        <button class="remove-filter" (click)="removeFilter(['minPrice', 'maxPrice'])" title="Remove filter">×</button>
+      </div>
+    </div>
+
+    <!-- NO EVENTS FOUND -->
+    <div
+      class="no-results"
+      *ngIf="!isPerformanceMode && hasSearched && !isLoading && events.length === 0"
+    >
+      <p></p>
+      <p>No matching events found</p>
+      <p>Try adjusting your search or filters.</p>
+    </div>
+
+    <!-- NO PERFORMANCES FOUND -->
+    <div
+      class="no-results"
+      *ngIf="isPerformanceMode && hasSearched && !isLoading && performances.length === 0"
+    >
+      <p>No matching performances found</p>
+      <p>Try adjusting your search or filters.</p>
+    </div>
+
+  </aside>
+</div>

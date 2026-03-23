@@ -1,0 +1,191 @@
+<div class="container mt-5 profile-page mb-4">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+
+      <h4 class="mb-4">Create User</h4>
+
+      <form #userForm="ngForm" (ngSubmit)="createUser()" novalidate>
+
+
+        <div class="form-group mb-3">
+          <label for="name">Name*</label>
+          <input
+            id="name"
+            class="form-control"
+            name="name"
+            [(ngModel)]="newUser.name"
+            required
+            minlength="2"
+            maxlength="255"
+            pattern="^(?!.*\\s{2,})[A-Za-zÄÖÜäöüẞß]+(?:[ -][A-Za-zÄÖÜäöüẞß]+)*$"
+            #name="ngModel"
+            [class.is-invalid]="name.invalid && (name.dirty || name.touched)"
+          />
+
+          <div class="invalid-feedback d-sm-block" *ngIf="name.invalid && (name.dirty || name.touched)">
+            <div *ngIf="name.errors?.['required']">Name is required.</div>
+            <div *ngIf="name.errors?.['minlength']">Name must be at least 2 characters.</div>
+            <div *ngIf="name.errors?.['maxlength']">Name is too long (max 255).</div>
+            <div *ngIf="name.errors?.['pattern']">
+              Only letters, single spaces, and '-' are allowed (no numbers, dots, or multiple spaces).
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group mb-3">
+          <label for="email">E-Mail*</label>
+          <input
+            id="email"
+            class="form-control"
+            name="email"
+            type="email"
+            [(ngModel)]="newUser.email"
+            required
+            email
+            maxlength="255"
+            #email="ngModel"
+            [class.is-invalid]="email.invalid && (email.dirty || email.touched)"
+          />
+
+          <div class="invalid-feedback d-sm-block" *ngIf="email.invalid && (email.dirty || email.touched)">
+            <div *ngIf="email.errors?.['required']">Email is required.</div>
+            <div *ngIf="email.errors?.['email']">Please enter a valid email address.</div>
+            <div *ngIf="email.errors?.['maxlength']">Email is too long (max 255).</div>
+          </div>
+        </div>
+
+        <div class="form-group mb-3">
+          <label for="password">Password*</label>
+          <input
+            id="password"
+            class="form-control"
+            name="password"
+            type="password"
+            [(ngModel)]="newUser.password"
+            required
+            minlength="8"
+            maxlength="255"
+            #password="ngModel"
+            [class.is-invalid]="password.invalid && (password.dirty || password.touched)"
+          />
+
+          <div class="invalid-feedback d-sm-block" *ngIf="(password.dirty || password.touched)">
+            <div *ngIf="password.errors?.['required']">Password is required.</div>
+            <div *ngIf="password.errors?.['minlength']">Password must be at least 8 characters.</div>
+            <div *ngIf="password.errors?.['maxlength']">Password is too long (max 255).</div>
+
+            @if (!hasUppercase(password.value) && !password.errors?.['required']) { <div>Password must contain at least one uppercase letter.</div> }
+            @if (!hasDigit(password.value) && !password.errors?.['required'])     { <div>Password must contain at least one digit.</div> }
+            @if (!hasSpecial(password.value) && !password.errors?.['required'])   { <div>Password must contain at least one special character.</div> }
+
+          </div>
+        </div>
+
+        <div class="form-group mb-3">
+          <label for="passwordRepeat">Confirm password*</label>
+          <input
+            id="passwordRepeat"
+            class="form-control"
+            name="passwordRepeat"
+            type="password"
+            [(ngModel)]="passwordRepeat"
+            required
+            minlength="8"
+            maxlength="255"
+            #passwordRepeatCtrl="ngModel"
+            [class.is-invalid]="(passwordRepeatCtrl.invalid || (passwordRepeat && newUser.password && passwordRepeat !== newUser.password))
+                      && (passwordRepeatCtrl.dirty || passwordRepeatCtrl.touched)"
+          />
+
+          <div class="invalid-feedback d-sm-block"
+               *ngIf="(passwordRepeatCtrl.invalid || (passwordRepeat && newUser.password && passwordRepeat !== newUser.password))
+            && (passwordRepeatCtrl.dirty || passwordRepeatCtrl.touched)">
+            <div *ngIf="passwordRepeatCtrl.errors?.['required']">Confirmation is required.</div>
+            <div *ngIf="passwordRepeatCtrl.errors?.['minlength']">Confirmation must be at least 8 characters.</div>
+            <div *ngIf="passwordRepeatCtrl.errors?.['maxlength']">Confirmation is too long (max 255).</div>
+            <div *ngIf="!passwordRepeatCtrl.errors && passwordRepeat !== newUser.password">The passwords do not match.</div>
+          </div>
+        </div>
+
+        <div class="form-group mb-3">
+          <label for="street">Street</label>
+          <input
+            id="street"
+            class="form-control"
+            name="street"
+            [(ngModel)]="newUser.street"
+            maxlength="255"
+            pattern="^(?!.*\\s{2,})[A-Za-zÄÖÜäöüẞß0-9]+(?:[A-Za-zÄÖÜäöüẞß0-9\\s\\.,\\/\\-'])*$"
+            #street="ngModel"
+            [class.is-invalid]="street.invalid && (street.dirty || street.touched)"
+          />
+
+          <div class="invalid-feedback d-sm-block" *ngIf="street.invalid && (street.dirty || street.touched)">
+            <div *ngIf="street.errors?.['maxlength']">Street is too long (max 255).</div>
+            <div *ngIf="street.errors?.['pattern']">
+              Street may contain letters, numbers, spaces and . , / - ' (no multiple spaces).
+            </div>
+          </div>
+        </div>
+
+        <!-- City -->
+        <div class="form-group mb-3">
+          <label for="city">City</label>
+          <input
+            id="city"
+            class="form-control"
+            name="city"
+            [(ngModel)]="newUser.city"
+            maxlength="255"
+            pattern="^(?!.*\\s{2,})[A-Za-zÄÖÜäöüẞß]+(?:[ -][A-Za-zÄÖÜäöüẞß]+)*$"
+            #city="ngModel"
+            [class.is-invalid]="city.invalid && (city.dirty || city.touched)"
+          />
+
+          <div class="invalid-feedback d-sm-block" *ngIf="city.invalid && (city.dirty || city.touched)">
+            <div *ngIf="city.errors?.['maxlength']">City is too long (max 255).</div>
+            <div *ngIf="city.errors?.['pattern']">
+              City may contain only letters, single spaces, and '-'.
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group mb-3">
+
+          <label for="country">Country</label>
+          <select
+            id="country"
+            class="form-control"
+            name="country"
+            [(ngModel)]="newUser.country"
+            #country="ngModel">
+            <option value="" disabled>Select country</option>
+            <option *ngFor="let c of countries" [value]="c.name">
+              {{ c.name }} ({{ c.code }})
+            </option>
+          </select>
+        </div>
+
+        <div class="form-check mb-3">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="adminCheck"
+            name="admin"
+            [(ngModel)]="newUser.admin">
+          <label class="form-check-label" for="adminCheck">
+            Admin
+          </label>
+        </div>
+
+        <button
+          type="submit"
+          class="btn btn-dark w-100 profile-submit-btn mb-2"
+          [disabled]="userForm.invalid">
+          Create User
+        </button>
+
+      </form>
+    </div>
+  </div>
+</div>
